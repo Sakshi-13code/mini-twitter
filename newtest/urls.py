@@ -1,14 +1,19 @@
 from django.conf.urls import url
 from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
+
 from . import views
 
 urlpatterns = [
 
-    url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('token/', obtain_auth_token, name='token'), #change name to login
+  #  url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    path('Tweet/', views.DisplayTweet.as_view(), name='tweet'),
+    path('Tweet/', views.DisplayTweet.as_view(), name='tweet'), #LisctCreate in single view, same for Userprofile and user
 
-    path('Tweet/Create', views.CreateTweet.as_view(), name='create_tweet'),
+    path('Tweet/Create', views.CreateTweet.as_view(), name='create_tweet'), #not required
+
+    path('Logout/', views.Logout.as_view(), name='logout'),
 
     path('Tweet/<int:pk>', views.DetailsViewTweet.as_view(), name='details_tweet'),
 
@@ -16,34 +21,31 @@ urlpatterns = [
 
     path('Profile/Create', views.CreateUserProfile.as_view(), name='create_profile'),
 
-    path('User/', views.DisplayUserProfile.as_view(), name = 'display_users'),
+    path('User/', views.DisplayUserProfile.as_view(), name='display_users'),
 
-    path('User/<int:pk>', views.DetailsUserProfile.as_view(), name = 'details_users'),
+    path('User/<int:pk>', views.DetailsUserProfile.as_view(), name='details_users'),
 
-#    path('Follow/', views.FollowView.as_view(), name='follow'),
+    path('Following/', views.GetUserFollowing.as_view(), name='display_followers'),
 
- #   path('Like/', views.LikeView.as_view(), name='like'),
+    path('Follow/',views.UserFollow.as_view(), name='follow_users')
 
-    path('home/', views.home, name='home'),
 
-    path('login/', views.login_page, name='login'),
 
-    path('signup/', views.signup, name='signup'),
-
-    path('pagelogout/',views.pagelogout, name='pagelogout'),
-
-    path('', views.first_page, name='firstpage'),
-
-    path('incorrect/', views.incorrect,name='incorrect'),
-
-    path('profile/', views.profile1, name='profile1'),
-
-    path('<str:username>/profile/', views.profile, name='profile'),
-
-    path('profile/new/', views.post_new, name='post_tweet'),
-
-    path('unihome/',views.unihome, name='unihome')
-
-    #   path('profile/<str:username>/',views.follower_details,name='follower_details')
 
 ]
+#users/ (GET, POST)
+'''users/<user_id> (GET, PUT, DELETE)
+user_id/followers/
+user_id/following/
+tweets/ (GET, POST)
+tweets/<tweet_id> (GET, PUT, DELETE)
+user_id/tweets/
+tweet_id/like'''
+
+'''
+    like and unlike a tweet
+    unfollow
+    timeline
+    edit bio in a profile and edit contents of a tweet
+'''
+

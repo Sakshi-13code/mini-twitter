@@ -1,39 +1,34 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Tweet, UserProfile, Follow, Likes
+from .models import Tweet, UserProfile, Follow, Like
 
 
 class TweetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tweet
-        fields = ('user','content')
+        fields = ('id', 'user', 'get_username', 'content', 'get_likes')
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('user','name','bio')
+        fields = ('user', 'name', 'bio') #userid instead of user
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username','password')
+        fields = ('username', 'password')
 
 
-class TweetSerializer2(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = '__all__'
-
-
-class TweetSerializer3(serializers.ModelSerializer):
+class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follow
-        fields = '__all__'
+        fields = ('user', 'followed_by') #user_id and followed_by_id
 
 
-class TweetSerializer4(serializers.ModelSerializer):
+class LikeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Likes
-        fields = '__all__'
+        model = Like
+        fields = ('tweet', 'user') #tweet_id and user_id
+

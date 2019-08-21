@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+    {%for n in name%}
+    <p>{{n}}</p>
+    {%endfor%}
+    <hr>
+    <p>Followers:</p>
+    {%for f in followers%}
+    <p>{{f}}</p>
+    {%endfor%}
+    <hr>
+    <p>Following:</p>
+    {%for w in following%}
+    <p>{{w}}</p>
+    {%endfor%}
+    <hr>
+    {%for t in tweet%}
+    <p>{{t}}</p>
+    {%endfor%}
+</body>
+</html>

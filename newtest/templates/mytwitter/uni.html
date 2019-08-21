@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Twitter</title>
+
+</head>
+<body>
+    <h1>Welcome to Twitter!</h1>
+    <p><a href="{% url 'newtest:post_tweet' %}">Tweet</a></p>
+    <p><a href="{% url 'newtest:profile1' %}">Visit Your Profile</a></p>
+    <p><a href ="{%url 'newtest:pagelogout'%}">Logout</a></p>
+    {% for t in final %}
+    <p>{{t.0}}</p>
+    <p>{{t.0.like}} Likes</p>
+    <form method = 'POST' action=" ">
+        {% csrf_token %}
+        <input type = 'hidden' name='tweetid' value="{{t.0.id}}"/>
+        {% ifequal 1 t.1%}
+        <input type = 'submit' value="Dislike"/>
+        {% else %}
+        <input type = 'submit' value="Like"/>
+
+        {%endifequal%}
+    </form>
+    <p><a href="{% url 'newtest:profile' username=t.0.user%}">{{t.0.user}}</a></p>
+
+
+    <hr>
+    {%endfor%}
+</body>
+</html>

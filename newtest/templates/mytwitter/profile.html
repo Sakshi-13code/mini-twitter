@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+<h2>Name:</h2>
+    {%for n in name%}
+    <p>{{n}}</p>
+    {%endfor%}
+    <hr>
+    <h2>Bio:</h2>
+    <p>{{bio}}</p>
+<form method = 'POST' action=" ">
+        {% csrf_token %}
+        <input type = 'hidden' name='follow' value="abcd"/>
+        <input type = 'submit' value="{{button}}"/>
+</form>
+
+    <hr>
+    <p><a href="{% url 'newtest:post_tweet' %}">Tweet</a></p>
+    <p><a href="{% url 'newtest:home' %}">My Feed</a></p>
+    <p><a href="{% url 'newtest:unihome' %}">Universal Feed</a></p>
+    <p><a href="{% url 'newtest:pagelogout' %}">Logout</a></p>
+    <h2>Followers:</h2>
+    {%for f in followers%}
+<p><a href="{%url 'newtest:profile' username=f%}">{{f}}</a></p>
+
+    {%endfor%}
+    <hr>
+    <h2>Following:</h2>
+    {%for w in following%}
+<p><a href="{%url 'newtest:profile' username=w%}">{{w}}</a></p>
+    {%endfor%}
+    <hr>
+<h2>Tweets</h2>
+    {%for t in tweet%}
+    <p>{{t.content}}</p>
+    {%endfor%}
+</body>
+</html>
+
