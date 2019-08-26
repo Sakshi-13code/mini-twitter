@@ -1,51 +1,53 @@
-from django.conf.urls import url
-from django.urls import path, include
+
+from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
 
 from . import views
 
 urlpatterns = [
 
-    path('token/', obtain_auth_token, name='token'), #change name to login
-  #  url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('login', obtain_auth_token, name='token'),
 
-    path('Tweet/', views.DisplayTweet.as_view(), name='tweet'), #LisctCreate in single view, same for Userprofile and user
+    path('logout', views.Logout.as_view(), name='logout'),
 
-    path('Tweet/Create', views.CreateTweet.as_view(), name='create_tweet'), #not required
+    path('signup', views.CreateUser.as_view(), name='create_user'),
 
-    path('Logout/', views.Logout.as_view(), name='logout'),
+    path('users', views.CreateDisplayUserProfile.as_view(), name='create_profile'),
 
-    path('Tweet/<int:pk>', views.DetailsViewTweet.as_view(), name='details_tweet'),
+    path('users/<int:pk>', views.UserProfileDetailView.as_view(), name='details_users'),
 
-    path('User/Create', views.CreateUser.as_view(), name='create_user'),
+    path('users/<int:pk>/tweets', views.GetUserTweet.as_view(), name='tweets'),
 
-    path('Profile/Create', views.CreateUserProfile.as_view(), name='create_profile'),
+    path('users/<int:pk>/followers', views.GetUserFollowing.as_view(), name='display_followers'),
 
-    path('User/', views.DisplayUserProfile.as_view(), name='display_users'),
+    path('users/<int:pk>/following', views.GetUserFollowers.as_view(), name='display_followers'),
 
-    path('User/<int:pk>', views.DetailsUserProfile.as_view(), name='details_users'),
+    path('tweets', views.CreateDisplayTweet.as_view(), name='tweet'),
 
-    path('Following/', views.GetUserFollowing.as_view(), name='display_followers'),
+    path('tweets/<int:pk>', views.TweetDetailView.as_view(), name='details_tweet'),
 
-    path('Follow/',views.UserFollow.as_view(), name='follow_users')
+    path('tweets/<int:pk>/like', views.LikeDislikeTweet.as_view(), name='like'),
 
+    path('timeline/', views.Timeline.as_view(), name='timeline'),
 
+    path('follow/<int:pk>', views.UserFollowUnfollow.as_view(), name='follow_users'),
 
+    # path('unfollow/<int:pk>', views.Unfollow.as_view(),name='unfollow')
 
 ]
-#users/ (GET, POST)
+# users/ (GET, POST)
 '''users/<user_id> (GET, PUT, DELETE)
 user_id/followers/
 user_id/following/
-tweets/ (GET, POST)
+tweets/ (GET, POST)  #done
 tweets/<tweet_id> (GET, PUT, DELETE)
 user_id/tweets/
 tweet_id/like'''
 
 '''
-    like and unlike a tweet
-    unfollow
-    timeline
-    edit bio in a profile and edit contents of a tweet
+    like and unlike a tweet    #done
+    unfollow #done
+    timeline #done
+    edit bio in a profile and #done
+    edit contents of a tweet #done
 '''
-

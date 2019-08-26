@@ -1,12 +1,11 @@
-
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name='profile')  #  related name not required
-    bio = models.TextField()  # charfield
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
 
     def __str__(self):
@@ -14,50 +13,47 @@ class UserProfile(models.Model):
 
 
 class Tweet(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE) #add related name
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tweets')
     content = models.TextField()
-    date = models.DateTimeField(auto_now_add=True) #created at/on
+    created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
 
-        ordering = ['-date']
+        ordering = ['-created_on']
 
     def __str__(self):
-        return self.content
-    #add user
+        template = '{0.content} {0.user.username}'
+        return template.format(self)
 
-    @property #not needed
-    def get_username(self):
-        return self.user.username
-
-    @property #remove .all()
+    @property
     def get_likes(self):
-        return self.tweetlike.all().count()
+        return self.tweetlikes.count()
 
 
-class Follow(models.Model):
-    #change model name
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='has_followers', null=True) #change related name
-    followed_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='is_followings', null=True) #remove null=true
-    #change followed_by name
+class FollowRelation(models.Model):
+
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
+
     def clean(self):
-        if self.user == self.followed_by:
+        if self.following == self.follower:
             raise ValidationError({
                 'Cannot Follow Yourself'
             })
 
     class Meta:
-        unique_together = ("user","followed_by")
+        unique_together = ("following", "follower")
 
     def __str__(self):
-        return self.user.username
-    #add followed_by username
+        template = '{0.following.username} {0.follower.username}'
+        return template.format(self)
+    #    return self.following.username, self.follower.username
+    # add followed_by username
 
 
+class TweetLike(models.Model):
 
-class Like(models.Model):
-    #change model name to tweetlike
-    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE, related_name='tweetlike') #plural related name
+    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE, related_name='tweetlikes')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userlike')
 
     class Meta:

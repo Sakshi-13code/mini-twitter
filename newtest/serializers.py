@@ -1,18 +1,21 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Tweet, UserProfile, Follow, Like
+from .models import Tweet, UserProfile, FollowRelation, TweetLike
 
 
 class TweetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tweet
-        fields = ('id', 'user', 'get_username', 'content', 'get_likes')
+        fields = ('id', 'user', 'content', 'get_likes')
+        read_only_fields = ('id', 'user', 'get_likes')
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('user', 'name', 'bio') #userid instead of user
+        fields = ('user_id', 'name', 'bio')
+        # userid instead of user
+        read_only_fields = ('user_id', 'name')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -23,12 +26,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 class FollowSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Follow
-        fields = ('user', 'followed_by') #user_id and followed_by_id
+        model = FollowRelation
+        fields = ('following_id', 'follower_id')
 
 
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Like
-        fields = ('tweet', 'user') #tweet_id and user_id
+        model = TweetLike
+        fields = ('tweet_id', 'user_id')
 
